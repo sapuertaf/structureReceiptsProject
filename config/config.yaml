@@ -1,0 +1,12 @@
+
+PROJECT_ID: "datatest-347114"
+LOCATION : "us-central1"
+
+MODEL_CONFS:
+  TYPE: "gemini-pro-vision"
+  PROMPT: "
+  What's this image
+  "
+
+BIGQUERY_CONFS:
+  TABLE_PATH: "@format {this.PROJECT_ID}.datasetandre.cloudFunctionTable"
