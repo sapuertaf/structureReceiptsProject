@@ -57,7 +57,7 @@ class ReceiptData:
         try:
             self._structured_data = DataFrame(self._unstructured_data)
         except Exception as e:
-            raise StructureDataError("", e)
+            raise StructureDataError("An error occurred while trying to structure the model's response", e)
         return self._structured_data
 
 
