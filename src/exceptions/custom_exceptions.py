@@ -66,6 +66,10 @@ class CapturedException(Exception):
         return json.dumps(self._to_dict())
 
 
+class ProcessError(CapturedException):
+    """Exception raised when there is an error during the execution of a pipeline stages."""
+
+
 class CheckConfigsError(CapturedException):
     """Exception raised when there is an error during the execution of a pipeline stages."""
 
@@ -92,3 +96,7 @@ class Load2BigQueryError(CapturedException):
 
 class BuildError(CapturedException):
     """raise this when there's a validation error"""
+
+
+class NotExistingLoggerError(CapturedException):
+    """"""
