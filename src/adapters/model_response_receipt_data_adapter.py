@@ -38,7 +38,7 @@ class ModelResponseReceiptDataAdapter:
             jsonified_response: list = model_response if isinstance(model_response, list) else [model_response]
             return jsonified_response
         except Exception as e:
-            raise JsonifyResponseError("", e)
+            raise JsonifyResponseError("An error occurred while transforming the model's response to JSON", e)
 
 
 if __name__ == "__main__":
