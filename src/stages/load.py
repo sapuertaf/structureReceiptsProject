@@ -1,4 +1,5 @@
 from interfaces.config import Config
+from interfaces.event_logger import EventLoggerInterface
 from exceptions.custom_exceptions import (
     CheckConfigsError,
     Load2BigQueryError,
@@ -20,13 +21,14 @@ class LoadStage:
     Args:
         config (Config): A configuration object.
     """
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, event_logger: EventLoggerInterface):
         """Initialize the LoadStage.
 
         Args:
             config (Config): A configuration object.
         """
         self._config: LazySettings = config.get()
+        self._event_logger = event_logger
         self._load_data: None or DataFrame = None
 
     @property
@@ -49,8 +51,8 @@ class LoadStage:
                     self._config.get("BIGQUERY_CONFS").get("TABLE_PATH") != ""):
                 return self
         except AttributeError as e:
-            raise CheckConfigsError("", e)
-        raise CheckConfigsError("")
+            raise CheckConfigsError(f"An error occurred while checking the required configurations for {__name__}", e)
+        raise CheckConfigsError(f"An error occurred while checking the required configurations for {__name__}")
 
     def _load_2_bigquery(self) -> None:
         """Load the data into BigQuery.
@@ -64,7 +66,7 @@ class LoadStage:
                    project_id=self._config.get("BIGQUERY_CONFS").get("PROJECT_ID"),
                    if_exists="append")
         except Exception as e:
-            raise Load2BigQueryError("", e)
+            raise Load2BigQueryError("An error occurred while trying to load data to BigQuery", e)
 
     def build(self, load_data: DataFrame = None) -> 'LoadStage':
         """Build the LoadStage.
@@ -83,4 +85,5 @@ class LoadStage:
 
     def execute(self) -> None:
         """Execute the data loading process."""
+        self._event_logger.info("Loading to BigQuery process about to execute")
         self._load_2_bigquery()
