@@ -1,3 +1,4 @@
+from interfaces.event_logger import EventLoggerInterface
 import mimetypes
 
 from cloudevents.http import CloudEvent
@@ -10,7 +11,7 @@ class CloudEventModelAdapter:
 
     This class provides methods to extract image data from CloudEvents and convert it to Part objects.
     """
-    def __init__(self, cloud_event: CloudEvent):
+    def __init__(self, cloud_event: CloudEvent, event_logger: EventLoggerInterface):
         """
         Initialize the CloudEventModelAdapter with the given CloudEvent.
 
@@ -18,6 +19,7 @@ class CloudEventModelAdapter:
             cloud_event (CloudEvent): The CloudEvent instance containing image data.
         """
         self._cloud_event = cloud_event
+        self._event_logger = event_logger  # The event logger must be built otherwise the logger will fail
         self._event_data = self._cloud_event.data
 
     @property
@@ -59,6 +61,7 @@ class CloudEventModelAdapter:
             Part: The image data as a Part object.
         """
         gcs_img_path = f"gs://{self._event_data['bucket']}/{self._event_data['name']}"
+        self._event_logger.info(f"New event from source: {gcs_img_path} detected")  # notify the detected cloud event
         return Part.from_uri(gcs_img_path,
                              mime_type=self._get_img_mime_type())
 
