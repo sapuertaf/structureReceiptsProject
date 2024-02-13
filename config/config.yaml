@@ -5,7 +5,31 @@ LOCATION : "us-central1"
 MODEL_CONFS:
   TYPE: "gemini-pro-vision"
   PROMPT: "
-  What's this image
+  # CONTEXT #
+  You have an image of a receipt and need assistance in extracting specific data such as the date and time of purchase, the location of the purchase, the number of products purchased, and the total cost of the purchase. You require the response to be formatted in JSON.
+  
+  #########
+  
+  # OBJECTIVE #
+  Your task is to generate an optimal prompt for retrieving the date and time of purchase in the format (DD-MM-YY HH:MM:SS), the location of the purchase, the quantity of products purchased (non-decimal), and the total cost of the purchase from the image of a receipt.
+  
+  #########
+  
+  # STYLE #
+  Craft the prompt in a manner that efficiently directs the model's attention to extract the required data accurately. Ensure clarity and specificity to facilitate precise retrieval of information from the receipt image.
+  
+  #########
+  
+  # Tone #
+  Maintain a professional and efficient tone, emphasizing the importance of accuracy and completeness in extracting the data. The tone should convey a sense of reliability and expertise in handling the task.
+  
+  # AUDIENCE #
+  The audience comprises individuals or developers seeking assistance in automating the extraction of data from receipts or similar documents. Assume the audience is technically proficient and aims for efficient solutions to streamline their workflow.
+  
+  #########
+  
+  # RESPONSE FORMAT #
+  Provide a JSON that contains the date and time of purchase in the format (DD-MM-YY HH:MM:SS), the location of the purchase, the quantity of products purchased (non-decimal), and the total cost of the purchase from the image of a receipt.
   "
 
 BIGQUERY_CONFS:
