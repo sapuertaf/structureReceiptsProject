@@ -1,5 +1,6 @@
 from interfaces.model import ModelInterface
 from interfaces.config import Config
+from interfaces.event_logger import EventLoggerInterface
 from exceptions.custom_exceptions import CheckConfigsError, AskPromptError
 
 from dynaconf.base import LazySettings
@@ -21,7 +22,7 @@ class Model(ModelInterface):
     Args:
         config (Config, optional): The configuration settings for the model. Defaults to None.
     """
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, event_logger: EventLoggerInterface):
         """
         Initializes the Model with optional configuration settings.
 
@@ -29,6 +30,7 @@ class Model(ModelInterface):
             config (Config): The configuration settings for the model.
         """
         self._config: LazySettings = config.get()
+        self._event_logger = event_logger
         self._model: None or GenerativeModel = None
         self._response: None | str = None
 
@@ -52,12 +54,15 @@ class Model(ModelInterface):
         Returns:
             Model: The Model instance.
         """
-        if (self._config.get("PROJECT_ID") is not None and
-                self._config.get("LOCATION") is not None and
-                self._config.get("MODEL_CONFS").get("TYPE") is not None and
-                self._config.get("MODEL_CONFS").get("PROMPT") is not None):
-            return self
-        raise CheckConfigsError("")
+        try:
+            if (self._config.get("PROJECT_ID") is not None and
+                    self._config.get("LOCATION") is not None and
+                    self._config.get("MODEL_CONFS").get("TYPE") is not None and
+                    self._config.get("MODEL_CONFS").get("PROMPT") is not None):
+                return self
+        except AttributeError as e:
+            raise CheckConfigsError(f"An error occurred while checking the required configurations for {__name__}", e)
+        raise CheckConfigsError(f"An error occurred while checking the required configurations for {__name__}")
 
     def _setup(self) -> 'Model':
         """
@@ -96,6 +101,7 @@ class Model(ModelInterface):
         """
         try:
             response = self._model.generate_content([img, self._config.get("MODEL_CONFS").get("PROMPT")])
+            self._event_logger.info("Prompt successfully asked to model. Response from model received")
             return response.text
         except (exceptions.InvalidArgument, exceptions.NotFound) as e:
-            raise AskPromptError("", e)
+            raise AskPromptError("An error occurred while prompting to the model", e)
