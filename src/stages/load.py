@@ -16,16 +16,19 @@ class LoadStage:
 
     Attributes:
         _config (LazySettings): An instance of LazySettings representing the configuration settings.
+        _event_logger (EventLoggerInterface): An event logger for logging events.
         _load_data (DataFrame or None): The data to be loaded into the BigQuery table.
 
     Args:
         config (Config): A configuration object.
+        event_logger (EventLoggerInterface): An event logger instance for logging events.
     """
     def __init__(self, config: Config, event_logger: EventLoggerInterface):
         """Initialize the LoadStage.
 
         Args:
             config (Config): A configuration object.
+            event_logger (EventLoggerInterface): An event logger instance for logging events.
         """
         self._config: LazySettings = config.get()
         self._event_logger = event_logger
