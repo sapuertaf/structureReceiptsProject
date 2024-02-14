@@ -17,6 +17,7 @@ class CloudEventModelAdapter:
 
         Args:
             cloud_event (CloudEvent): The CloudEvent instance containing image data.
+            event_logger (EventLoggerInterface): An event logger instance for logging events.
         """
         self._cloud_event = cloud_event
         self._event_logger = event_logger  # The event logger must be built otherwise the logger will fail
