@@ -59,15 +59,3 @@ class ReceiptData:
         except Exception as e:
             raise StructureDataError("An error occurred while trying to structure the model's response", e)
         return self._structured_data
-
-
-if __name__ == "__main__":
-    import json
-    mock_json = """
-    [{
-        "persona" : "Juan Perez",
-        "direccion": "Calle n #x-y"
-    }]
-    """
-    receipt = ReceiptData(json.loads(mock_json)).structure_data()
-    print(receipt)
