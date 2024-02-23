@@ -31,8 +31,8 @@ class ModelResponseReceiptDataAdapter:
         Returns:
             list: The JSON-formatted data converted into a list.
         """
-        model_response = (self._model_response.replace('```\n', ''))\
-            .replace('\n```', '')
+        model_response = (self._model_response.replace('```json', ''))\
+            .replace('```', '')
         try:
             model_response = json.loads(model_response)
             jsonified_response: list = model_response if isinstance(model_response, list) else [model_response]
