@@ -21,7 +21,6 @@ def structure_receipt_img_(cloud_event: CloudEvent):
 
         img: Part = ce_model_adapter.get_cloud_storage_img()
         response: str = model.build().ask_prompt(img)
-        print(response)  # TODO: Delete this print
 
         model_receipt_adapter = ModelResponseReceiptDataAdapter(response)
         receipt_data: DataFrame = ReceiptData(model_receipt_adapter.jsonify_response()).structure_data()
