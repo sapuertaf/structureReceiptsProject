@@ -23,14 +23,6 @@ def structure_receipt_img_(cloud_event: CloudEvent):
         response: str = model.build().ask_prompt(img)
         print(response)  # TODO: Delete this print
 
-        mock_response = """
-        {
-            "persona" : "Juan Perez",
-            "direccion": "Calle n #x-y"
-        }
-        """  # TODO: Delete this mock use
-        response = mock_response  # TODO: Delete this mock use
-
         model_receipt_adapter = ModelResponseReceiptDataAdapter(response)
         receipt_data: DataFrame = ReceiptData(model_receipt_adapter.jsonify_response()).structure_data()
 
